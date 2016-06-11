@@ -101,41 +101,40 @@ def ssh(name):
         choice = int(input())
         ssh_explicit(host, usernames[choice - 1])
 
-# commands
-NAME = 'name'
-ADD = 'add'
+def main():
+    parser = ArgumentParser(description='SSHER')
+    parser.add_argument('--name', action='store')
+    parser.add_argument('--add', action='store_true')
+    parser.add_argument('--list', action='store_true')
+    args = parser.parse_args()
 
-parser = ArgumentParser(description='SSHER')
-parser.add_argument('--name', action='store')
-parser.add_argument('--add', action='store_true')
-parser.add_argument('--list', action='store_true')
-args = parser.parse_args()
+    if args.add:
+        # adding a new record
+        print('Enter name: ', end='')
+        name = input()
+        row = get_name(name)
 
-if args.add:
-    # adding a new record
-    print('Enter name: ', end='')
-    name = input()
-    row = get_name(name)
+        if row:
+            name, host, usernames = row
+            print('Adding username to host {}'.format(host))
+        else:
+            print('Enter host: ', end='')
+            host = input()
 
-    if row:
-        name, host, usernames = row
-        print('Adding username to host {}'.format(host))
+        print('Enter username: ', end='')
+        username = input()
+
+        if add(name, host, username):
+            print('Adding done!')
+    elif args.list:
+        # list all the records in database
+        print('List databse: ')
+        for name, host, usernames in DB:
+            print('name: {}({})'.format(name, host))
+            print('  users: {}'.format(', '.join(usernames)))
+    elif args.name:
+        # perform ssh according to the name
+        ssh(args.name)
+        print('Goodbye...')
     else:
-        print('Enter host: ', end='')
-        host = input()
-
-    print('Enter username: ', end='')
-    username = input()
-
-    if add(name, host, username):
-        print('Adding done!')
-elif args.list:
-    # list all the records in database
-    print('List databse: ')
-    for name, host, usernames in DB:
-        print('name: {}({})'.format(name, host))
-        print('  users: {}'.format(', '.join(usernames)))
-elif args.name:
-    # perform ssh according to the name
-    ssh(args.name)
-    print('Goodbye...')
+        print('doing nothing..')

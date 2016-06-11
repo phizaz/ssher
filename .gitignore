@@ -1,3 +1,4 @@
 .idea
 env
 ssher_db.txt
+ssher/__pycache__
