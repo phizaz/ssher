@@ -2,3 +2,4 @@
 env
 ssher_db.txt
 ssher/__pycache__
+*.pyc
