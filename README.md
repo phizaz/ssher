@@ -27,6 +27,25 @@ Enter name: test
 Enter host: 192.168.1.1
 Enter username: me  
 Adding done!
+$ sssh --add 
+Enter name: test
+Adding username to host 192.168.1.1
+Enter username: you 
+Adding done!
 ```
 
 ## Listing
+```
+$ sssh --list
+name: test(192.168.1.1)
+  users: me, you
+```
+
+## Connect
+```
+$ sssh --name=test
+1. me@192.168.1.1
+2. you@192.168.1.1
+Choose the username: 1   
+SSH to me@192.168.1.1
+```
