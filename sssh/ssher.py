@@ -1,13 +1,13 @@
-from os.path import join, exists
+from os.path import join, exists, dirname
 from argparse import ArgumentParser
 import sys
 
-DB_PATH = 'ssher_db.txt'
+DB_PATH = join(dirname(__file__), 'ssher_db.txt')
 
 def read_db():
     # name host username(s)
     if not exists(DB_PATH):
-        with open(DB_PATH, 'w') as handle:
+        with open(DB_PATH, 'w') as _:
             pass
 
     db = []
@@ -25,7 +25,7 @@ def apply_db(db):
                 name,
                 host,
                 ','.join(usernames)
-            ]))
+            ]) + '\n')
 
 DB = read_db()
 
@@ -45,16 +45,16 @@ def add_username(row, username):
     row[2].append(username)
 
 def add(name=None, host=None, username=None):
+    if not username:
+        print('username must be entered')
+        return False
+
     if name:
         row = get_name(name)
     elif host:
         row = get_host(host)
     else:
         print('either name or host must be entered')
-        return False
-
-    if not username:
-        print('username must be entered')
         return False
 
     if not row:
