@@ -1,6 +1,7 @@
 from os.path import join, exists, dirname
 from argparse import ArgumentParser
 import sys
+import subprocess
 
 DB_PATH = join(dirname(__file__), 'ssher_db.txt')
 
@@ -69,18 +70,8 @@ def add(name=None, host=None, username=None):
     return True
 
 def run_command(command, verbose=False):
-    """
-    Run the given command using the system shell
-    *fix this to print output as it goes
-    """
-    import subprocess
-    error = False
-
-    if verbose == True:
-        print(command)
-
     job = subprocess.Popen(command, bufsize=0, shell=True, stdout=sys.stdout, stderr=sys.stderr, stdin=sys.stdin)
-    result = job.wait()
+    job.wait()
 
 def ssh_explicit(host, username):
     print('SSH to {}@{}'.format(username, host))
