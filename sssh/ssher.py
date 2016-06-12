@@ -88,9 +88,14 @@ def ssh(name):
     else:
         for i, username in enumerate(usernames, 1):
             print('{}. {}@{}'.format(i, username, host))
-        print('Choose the username: ', end='')
-        choice = int(input())
-        ssh_explicit(host, usernames[choice - 1])
+        while True:
+            print('Choose the username: ', end='')
+            choice = int(input())
+            if choice not in range(1, len(usernames) + 1):
+                print('Wrong option, try again..')
+                continue
+            ssh_explicit(host, usernames[choice - 1])
+            break
 
 def main():
     parser = ArgumentParser(description='SSHER')
