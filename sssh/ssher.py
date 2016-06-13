@@ -4,7 +4,7 @@ from .db import DB
 import sys
 import subprocess
 
-__version__ = '0.6'
+__version__ = '0.7'
 
 db = DB()
 
@@ -45,14 +45,19 @@ def ssh(host, username):
     run_command('ssh {}@{}'.format(username, host))
 
 def main():
+    print('SSH-er (sssh) version: {}'.format(__version__))
+
     parser = ArgumentParser(description='SSHER')
+    parser.add_argument('implicit_name', nargs='?', action='store')
     parser.add_argument('--name', action='store')
     parser.add_argument('--add', action='store_true')
     parser.add_argument('--list', action='store_true')
     parser.add_argument('--remove', action='store_true')
     args = parser.parse_args()
 
-    print('SSH-er (sssh) version: {}'.format(__version__))
+    if args.implicit_name and args.name:
+        print('do not use both option --name and positional argument at the same time..')
+        return
 
     if args.add:
         # adding a new record
@@ -84,9 +89,10 @@ def main():
             print('name: {}({})'.format(name, host))
             print('  users: {}'.format(', '.join(usernames)))
 
-    elif args.name:
+    elif args.name or args.implicit_name:
+        name = args.name or args.implicit_name
         # perform ssh according to the name
-        row = db.get_name(args.name)
+        row = db.get_name(name)
         if not row:
             print('name not found')
             return
